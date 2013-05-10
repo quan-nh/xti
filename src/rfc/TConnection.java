@@ -25,6 +25,8 @@ public class TConnection {
 
 	public byte[] tSelRemote = null;
 	public byte[] tSelLocal = null;
+	
+	public byte[] userData = null;
 
 	private int srcRef;
 	private int dstRef;
@@ -89,6 +91,9 @@ public class TConnection {
 		if (tSelRemote != null) {
 			variableLength += 2 + tSelRemote.length;
 		}
+		if (userData != null) {
+			variableLength += userData.length;
+		}
 		os.writeShort(4 + 7 + variableLength);
 		// writing RFC 1006 Header finished
 
@@ -125,6 +130,9 @@ public class TConnection {
 			os.write(tSelLocal.length);
 			os.write(tSelLocal);
 		}
+		if (userData != null) {
+			os.write(userData);
+		}
 
 		os.flush();
 
@@ -142,39 +150,7 @@ public class TConnection {
 		lengthIndicator = is.readByte() & 0xff;
 		int TPDUCode = is.readByte() & 0xff;
 		if (TPDUCode != 0xd0) {
-			{
-			if(TPDUCode == 0x80){
-				// Disconnect Request (DR)
-
-				if (lengthIndicator != 6) {
-					System.out.println("lengthIndicator=" + lengthIndicator);
-					throw new IOException();
-				}
-
-				// check if the DST-REF field is set to the reference of the
-				// receiving entity -> srcRef
-				if (is.readShort() != srcRef) {
-					throw new IOException("Syntax error: srcRef wrong");
-				}
-
-				// check if the SRC-REF field is that of the entity sending
-				// the DR
-				if (is.readShort() != dstRef) {
-					throw new IOException("Syntax error: dstRef wrong");
-				}
-
-				// check the reason field, for class 0 only between 1 and 4
-				int reason = is.readByte() & 0xff;
-				if (reason < 0 || reason > 4) {
-					System.out.println("reason="+reason);
-					throw new IOException("Syntax error: reason out of bound");
-				}
-
-				// Disconnect is valid, throw exception
-				throw new EOFException("Disconnect request. Reason:" + reason);
-			}
-			throw new IOException();
-			}
+			throw new IOException("TPDUCode="+TPDUCode);
 		}
 		// read the dstRef which is the srcRef for this end-point
 		is.readShort();

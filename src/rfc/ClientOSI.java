@@ -22,6 +22,8 @@ public class ClientOSI {
 	private byte[] tSelRemote = null;
 	private byte[] tSelLocal = null;
 
+	private byte[] userData = null;
+	
 	/**
 	 * Use this constructor to create a client that will start connections
 	 * to remote.
@@ -122,6 +124,7 @@ public class ClientOSI {
 		TConnection tConnection = new TConnection(socket, maxTPDUSizeParam, messageTimeout, messageFragmentTimeout);
 		tConnection.tSelRemote = tSelRemote;
 		tConnection.tSelLocal = tSelLocal;
+		tConnection.userData = userData;
 		tConnection.startConnection();
 
 		return tConnection;
@@ -166,6 +169,14 @@ public class ClientOSI {
 
 	public void settSelLocal(byte[] tSelLocal) {
 		this.tSelLocal = tSelLocal;
+	}
+
+	public byte[] getUserData() {
+		return userData;
+	}
+
+	public void setUserData(byte[] userData) {
+		this.userData = userData;
 	}
 	
 }
