@@ -25,8 +25,6 @@ public class TConnection {
 
 	public byte[] tSelRemote = null;
 	public byte[] tSelLocal = null;
-	
-	public byte[] userData = null;
 
 	private int srcRef;
 	private int dstRef;
@@ -91,9 +89,6 @@ public class TConnection {
 		if (tSelRemote != null) {
 			variableLength += 2 + tSelRemote.length;
 		}
-		if (userData != null) {
-			variableLength += userData.length;
-		}
 		os.writeShort(4 + 7 + variableLength);
 		// writing RFC 1006 Header finished
 
@@ -130,9 +125,6 @@ public class TConnection {
 			os.write(tSelLocal.length);
 			os.write(tSelLocal);
 		}
-		if (userData != null) {
-			os.write(userData);
-		}
 
 		os.flush();
 
@@ -150,7 +142,7 @@ public class TConnection {
 		lengthIndicator = is.readByte() & 0xff;
 		int TPDUCode = is.readByte() & 0xff;
 		if (TPDUCode != 0xd0) {
-			throw new IOException("TPDUCode="+TPDUCode);
+			throw new IOException("TPDUCode=" + TPDUCode);
 		}
 		// read the dstRef which is the srcRef for this end-point
 		is.readShort();
@@ -466,7 +458,7 @@ public class TConnection {
 					// Disconnect is valid, throw exception
 					throw new EOFException("Disconnect request. Reason:" + reason);
 
-				} else if (tpduCode == 0x80) {
+				} else if (tpduCode == 0x70) {
 					throw new EOFException("Got TPDU error (ER) message");
 				} else {
 					throw new IOException("Syntax error: unknown TPDU code");
