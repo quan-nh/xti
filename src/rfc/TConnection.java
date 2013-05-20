@@ -459,7 +459,9 @@ public class TConnection {
 					throw new EOFException("Disconnect request. Reason:" + reason);
 
 				} else if (tpduCode == 0x70) {
-					throw new EOFException("Got TPDU error (ER) message");
+					is.readShort();
+					int reason = is.readByte() & 0xff;
+					throw new EOFException("Got TPDU error (ER) message. Reason:" + reason);
 				} else {
 					throw new IOException("Syntax error: unknown TPDU code");
 				}
