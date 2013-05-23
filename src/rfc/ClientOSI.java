@@ -13,7 +13,7 @@ import javax.net.SocketFactory;
  */
 public class ClientOSI {
 
-	private int maxTPDUSizeParam = 16;
+	private int maxTPDUSizeParam = 7;
 	private SocketFactory socketFactory = null;
 	private int messageTimeout = 0;
 	private int messageFragmentTimeout = 60000;

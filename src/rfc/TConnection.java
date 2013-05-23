@@ -440,19 +440,19 @@ public class TConnection {
 					// check if the DST-REF field is set to the reference of the
 					// receiving entity -> srcRef
 					if (is.readShort() != srcRef) {
-						throw new IOException("Syntax error: srcRef wrong");
+						//throw new IOException("Syntax error: srcRef wrong");
 					}
 
 					// check if the SRC-REF field is that of the entity sending
 					// the DR
 					if (is.readShort() != dstRef) {
-						throw new IOException("Syntax error: dstRef wrong");
+						//throw new IOException("Syntax error: dstRef wrong");
 					}
 
 					// check the reason field, for class 0 only between 1 and 4
 					int reason = is.readByte() & 0xff;
 					if (reason < 0 || reason > 4) {
-						throw new IOException("Syntax error: reason out of bound");
+						//throw new IOException("Syntax error: reason out of bound");
 					}
 
 					// Disconnect is valid, throw exception
